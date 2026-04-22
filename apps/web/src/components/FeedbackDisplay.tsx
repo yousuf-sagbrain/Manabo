@@ -1,9 +1,9 @@
 import type { QuizState } from '../hooks/useQuiz'
-import type { HiraganaChar } from '../data/hiragana'
+import type { KanaChar } from '../data/types'
 
 interface FeedbackDisplayProps {
   state: QuizState
-  char: HiraganaChar
+  char: KanaChar
 }
 
 export function FeedbackDisplay({ state, char }: FeedbackDisplayProps) {
