@@ -1,8 +1,8 @@
 {
-  "name": "bjet-monorepo",
+  "name": "manabo",
   "private": true,
   "version": "0.0.0",
-  "description": "B-JET Hiragana & Katakana Learning Platform — monorepo root",
+  "description": "Manabo (学ぼ) — B-JET Hiragana & Katakana Learning Platform",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -15,5 +15,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "drizzle-orm": "^0.36.4"
   }
 }

@@ -1,7 +1,7 @@
-import type { HiraganaChar } from '../data/hiragana'
+import type { KanaChar } from '../data/types'
 
 interface CharacterCardProps {
-  char: HiraganaChar
+  char: KanaChar
 }
 
 export function CharacterCard({ char }: CharacterCardProps) {
