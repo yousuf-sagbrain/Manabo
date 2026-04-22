@@ -1,0 +1,19 @@
+{
+  "name": "bjet-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "B-JET Hiragana & Katakana Learning Platform — monorepo root",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
