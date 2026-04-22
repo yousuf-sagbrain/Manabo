@@ -48,3 +48,8 @@ pnpm-debug.log*
 
 # Local skill files — Claude reference docs, not for the repo
 skill/
+
+# Claude Code / agent internals — local only
+.agents/
+.claude/
+skills-lock.json

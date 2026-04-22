@@ -8,12 +8,12 @@ const app = express()
 const PORT = process.env.PORT ?? 4000
 const API_URL = process.env.API_URL ?? 'http://localhost:8000'
 
-app.use(cors({ origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173' }))
+app.use(cors({ origin: process.env.CORS_ORIGIN ?? 'http://localhost:3000' }))
 app.use(morgan('dev'))
 app.use(express.json())
 
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'bjet-gateway' })
+  res.json({ status: 'ok', service: 'manabo-gateway' })
 })
 
 // Stricter rate limit on exam endpoints to protect July test load
