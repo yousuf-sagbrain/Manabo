@@ -16,6 +16,7 @@ import { HeartsDisplay }   from './components/HeartsDisplay'
 import { SessionOverlay }  from './components/SessionOverlay'
 import { MultipleChoiceOptions } from './components/MultipleChoiceOptions'
 import { DashboardPage }   from './pages/DashboardPage'
+import { KanaChartPage }  from './pages/KanaChartPage'
 import { AdminPage }       from './pages/AdminPage'
 import { useHearts }       from './hooks/useHearts'
 import type { ScriptMode, QuizMode } from './hooks/useQuiz'
@@ -34,8 +35,8 @@ const MODE_OPTIONS: { value: QuizMode; label: string }[] = [
 ]
 
 function QuizPage() {
-  const { user, logout }  = useAuth()
-  const [, setLocation]   = useLocation()
+  const { user, logout }    = useAuth()
+  const [, setLocation]     = useLocation()
   const [script, setScript] = useState<ScriptMode>('hiragana')
   const [mode,   setMode]   = useState<QuizMode>('typing')
 
@@ -45,8 +46,8 @@ function QuizPage() {
   const { stats, refresh: refreshStats } = useStats()
   const { hearts, maxHearts, loseHeart, resetHearts, hasLives } = useHearts()
 
-  const prevCorrectRef   = useRef(0)
-  const prevStreakRef    = useRef(0)
+  const prevCorrectRef  = useRef(0)
+  const prevStreakRef   = useRef(0)
   const [confettiTrigger, setConfettiTrigger] = useState(0)
   const [xpToastTrigger,  setXpToastTrigger]  = useState(0)
 
@@ -61,20 +62,15 @@ function QuizPage() {
   useEffect(() => {
     const prev = prevCorrectRef.current
     prevCorrectRef.current = session.correct
-    if (session.correct > prev) {
-      setXpToastTrigger(t => t + 1)
-    }
+    if (session.correct > prev) setXpToastTrigger(t => t + 1)
   }, [session.correct])
 
   useEffect(() => {
     if (state === 'incorrect') loseHeart()
   }, [state])
 
-  // Refresh global stats whenever a session answer lands
   useEffect(() => {
-    if (state === 'correct' || state === 'incorrect') {
-      refreshStats()
-    }
+    if (state === 'correct' || state === 'incorrect') refreshStats()
   }, [state, refreshStats])
 
   function handleRetry() {
@@ -86,145 +82,140 @@ function QuizPage() {
     <>
       <Confetti trigger={confettiTrigger} />
       <XPToast trigger={xpToastTrigger} />
-      {!hasLives && (
-        <SessionOverlay stats={session} onRetry={handleRetry} />
-      )}
-      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 flex flex-col items-center justify-center px-4 py-8">
-        <div className="w-full max-w-sm flex flex-col gap-5">
+      {!hasLives && <SessionOverlay stats={session} onRetry={handleRetry} />}
 
-          {/* Header */}
-          <header className="flex flex-col items-center gap-1">
-            <img src={manaboLogo} alt="Manabo" className="h-12 w-auto object-contain" />
-            <p className="text-sm text-purple-600 font-medium tracking-wide">Kana Practice</p>
-          </header>
+      {/* Sticky app header */}
+      <header className="sticky top-0 z-10 flex items-center justify-between px-5 py-3
+                          bg-white/90 border-b-2 border-slate-100"
+              style={{ backdropFilter: 'blur(8px)' }}>
+        <img src={manaboLogo} alt="Manabo" className="h-8 w-auto object-contain" />
 
-          {/* User badge + XP/streak + nav */}
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="text-xs text-gray-600 font-medium truncate max-w-[120px]">
-                {user?.full_name ?? user?.applicant_id}
+        <div className="flex items-center gap-1.5">
+          {stats && (
+            <>
+              <span className="text-xs font-extrabold text-amber-600 bg-amber-50 border border-amber-200
+                               rounded-full px-2.5 py-0.5 tabular-nums">
+                ⚡ {stats.xp}
               </span>
-              {stats && (
-                <span className="flex items-center gap-1.5 shrink-0">
-                  <span className="text-xs font-bold text-purple-600 bg-purple-50 border border-purple-200 rounded-full px-2 py-0.5 tabular-nums">
-                    ⚡ {stats.xp}
-                  </span>
-                  {stats.streak_days > 0 && (
-                    <span className="text-xs font-bold text-amber-500 tabular-nums">
-                      🔥 {stats.streak_days}
-                    </span>
-                  )}
+              {stats.streak_days > 0 && (
+                <span className="text-xs font-extrabold text-amber-500 tabular-nums">
+                  🔥 {stats.streak_days}
                 </span>
               )}
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setLocation('/dashboard')}
-                className="text-xs text-purple-600 hover:text-purple-800 font-medium
-                  transition-colors touch-manipulation focus-visible:outline-none
-                  focus-visible:ring-2 focus-visible:ring-purple-400 rounded"
-              >
-                Dashboard
-              </button>
-              {user?.role === 'admin' && (
-                <button
-                  onClick={() => setLocation('/admin')}
-                  className="text-xs text-amber-600 hover:text-amber-800 font-medium
-                    transition-colors touch-manipulation focus-visible:outline-none
-                    focus-visible:ring-2 focus-visible:ring-purple-400 rounded"
-                >
-                  Admin
-                </button>
-              )}
-              <button
-                onClick={logout}
-                className="text-xs text-gray-400 hover:text-gray-600 font-medium transition-colors
-                  touch-manipulation focus-visible:outline-none focus-visible:ring-2
-                  focus-visible:ring-purple-400 rounded"
-              >
-                Sign out
-              </button>
-            </div>
-          </div>
+            </>
+          )}
+        </div>
 
-          {/* Script selector */}
-          <div role="group" aria-label="Script selection" className="flex gap-2">
-            {SCRIPT_OPTIONS.map(o => (
-              <button
-                key={o.value}
-                type="button"
-                onClick={() => setScript(o.value)}
-                className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all touch-manipulation
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400
-                  ${script === o.value
-                    ? 'bg-purple-500 text-white shadow-sm'
-                    : 'bg-white text-gray-500 border border-purple-100 hover:border-purple-300'
-                  }`}
-              >
-                {o.label}
-              </button>
-            ))}
-          </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setLocation('/dashboard')}
+            className="text-xs font-extrabold text-navy-500 hover:text-navy-700 uppercase tracking-widest
+                       touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 rounded"
+          >
+            Dashboard
+          </button>
+          {user?.role === 'admin' && (
+            <button
+              onClick={() => setLocation('/admin')}
+              className="text-xs font-extrabold text-amber-600 hover:text-amber-800 uppercase tracking-widest
+                         touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 rounded"
+            >
+              Admin
+            </button>
+          )}
+          <button
+            onClick={logout}
+            className="text-xs font-extrabold text-slate-400 hover:text-slate-600 uppercase tracking-widest
+                       touch-manipulation focus-visible:outline-none rounded"
+          >
+            Sign out
+          </button>
+        </div>
+      </header>
 
-          {/* Mode selector */}
-          <div role="group" aria-label="Mode selection" className="flex gap-2">
-            {MODE_OPTIONS.map(o => (
-              <button
-                key={o.value}
-                type="button"
-                onClick={() => setMode(o.value)}
-                className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all touch-manipulation
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400
-                  ${mode === o.value
-                    ? 'bg-pink-500 text-white shadow-sm'
-                    : 'bg-white text-gray-500 border border-pink-100 hover:border-pink-300'
-                  }`}
-              >
-                {o.label}
-              </button>
-            ))}
-          </div>
+      <div className="min-h-[calc(100vh-56px)] bg-[#fafbfd] flex flex-col items-center px-4 py-6">
+        <div className="w-full max-w-sm flex flex-col gap-4">
 
-          {/* Hearts */}
-          <div className="flex justify-center">
+          {/* User greeting */}
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-500 truncate max-w-[180px]">
+              {user?.full_name ?? user?.applicant_id}
+            </span>
             <HeartsDisplay hearts={hearts} maxHearts={maxHearts} />
           </div>
 
-          {/* Main quiz area */}
-          <main className="flex flex-col gap-5">
-            <ScoreTracker session={session} />
-
-            <div className="flex justify-center">
-              <CharacterCard char={current} />
+          {/* Script + Mode selectors */}
+          <div className="flex flex-col gap-2">
+            {/* Script */}
+            <div role="group" aria-label="Script selection"
+                 className="flex p-1 gap-1 bg-slate-100 rounded-2xl">
+              {SCRIPT_OPTIONS.map(o => (
+                <button
+                  key={o.value}
+                  type="button"
+                  onClick={() => setScript(o.value)}
+                  className={`flex-1 py-2 rounded-xl text-xs font-extrabold uppercase tracking-wider
+                              transition-all duration-[120ms] touch-manipulation
+                              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300
+                              ${script === o.value
+                                ? 'bg-white text-navy-700 shadow-sm'
+                                : 'text-slate-400 hover:text-slate-600'
+                              }`}
+                >
+                  {o.label}
+                </button>
+              ))}
             </div>
 
+            {/* Mode */}
+            <div role="group" aria-label="Mode selection"
+                 className="flex p-1 gap-1 bg-slate-100 rounded-2xl">
+              {MODE_OPTIONS.map(o => (
+                <button
+                  key={o.value}
+                  type="button"
+                  onClick={() => setMode(o.value)}
+                  className={`flex-1 py-2 rounded-xl text-xs font-extrabold uppercase tracking-wider
+                              transition-all duration-[120ms] touch-manipulation
+                              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300
+                              ${mode === o.value
+                                ? 'bg-white text-navy-700 shadow-sm'
+                                : 'text-slate-400 hover:text-slate-600'
+                              }`}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Score bar */}
+          <ScoreTracker session={session} />
+
+          {/* Main quiz area */}
+          <main className="flex flex-col gap-4">
+            <CharacterCard char={current} />
+
             {mode === 'typing' ? (
-              <InputField
-                value={input}
-                state={state}
-                onChange={setInput}
-                onSubmit={submit}
-              />
+              <InputField value={input} state={state} onChange={setInput} onSubmit={submit} />
             ) : (
-              <MultipleChoiceOptions
-                correct={current}
-                dataset={dataset}
-                state={state}
-                onSelect={submitSelection}
-              />
-            )}
-
-            <FeedbackDisplay state={state} char={current} />
-
-            {mode === 'typing' && (
-              <NextButton state={state} onNext={next} onSubmit={submit} />
-            )}
-
-            {mode === 'multiple-choice' && state !== 'answering' && (
-              <NextButton state={state} onNext={next} onSubmit={() => {}} />
+              <MultipleChoiceOptions correct={current} dataset={dataset} state={state} onSelect={submitSelection} />
             )}
           </main>
 
+        </div>
+      </div>
+
+      {/* Feedback drawer + CTA — fixed to bottom */}
+      <div className="fixed bottom-0 left-0 right-0 z-20">
+        <FeedbackDisplay state={state} char={current} />
+        <div className="bg-[#fafbfd] px-4 pb-6 pt-3 max-w-sm mx-auto">
+          {mode === 'typing' && (
+            <NextButton state={state} onNext={next} onSubmit={submit} />
+          )}
+          {mode === 'multiple-choice' && state !== 'answering' && (
+            <NextButton state={state} onNext={next} onSubmit={() => {}} />
+          )}
         </div>
       </div>
     </>
@@ -241,6 +232,7 @@ export default function App() {
   return (
     <Switch>
       <Route path="/dashboard" component={DashboardPage} />
+      <Route path="/chart" component={KanaChartPage} />
       <Route path="/admin" component={AdminPage} />
       <Route component={QuizPage} />
     </Switch>

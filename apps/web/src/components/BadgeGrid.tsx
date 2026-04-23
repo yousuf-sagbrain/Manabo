@@ -20,8 +20,8 @@ export function BadgeGrid({ earned }: BadgeGridProps) {
             title={isEarned ? `${meta.label} — earned ${new Date(earnedDate!).toLocaleDateString()}` : meta.desc}
             className={`flex flex-col items-center gap-1 p-3 rounded-2xl border-2 transition-all
               ${isEarned
-                ? 'bg-purple-50 border-purple-200 shadow-sm'
-                : 'bg-gray-50 border-gray-100 opacity-50 grayscale'
+                ? 'bg-amber-50 border-amber-200'
+                : 'bg-slate-50 border-slate-100 opacity-50 grayscale'
               }`}
           >
             <span className="text-2xl leading-none" aria-hidden="true">{meta.icon}</span>
