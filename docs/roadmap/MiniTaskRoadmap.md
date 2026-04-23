@@ -23,12 +23,15 @@
 | ✅ | M-006 | Tailwind CSS Styling | MUST | Tailwind v3 configured; warm purple/pink palette |
 | ✅ | M-007 | Session Score Tracker | MUST | `ScoreTracker.tsx` — correct / incorrect / accuracy % / streak + streakMax |
 | ⏳ | M-008 | Audio Playback via Web Speech API | DEFERRABLE | `useAudio.ts` + `AudioButton.tsx` to build |
+| ✅ | M-040 | XP Counter + Streak Flame in Quiz Header | MUST | XP pill + 🔥 streak in header; floating +10 XP toast on correct answer |
+| ✅ | M-041 | Hearts/Lives System | DEFERRABLE | 5 hearts per session; SessionOverlay on 0 hearts; frontend-only |
+| ✅ | M-044 | Leaderboard Modal | DEFERRABLE | Radix Dialog; podium top 3; ranked list; your row highlighted |
 | ✅ | M-009 | Keyboard-First UX | MUST | Enter submits; Space/Enter advances to Next |
-| ⏳ | M-010 | Mobile-Responsive Layout | MUST | 44px touch targets spec-compliant; needs full mobile QA |
+| ✅ | M-010 | Mobile-Responsive Layout | MUST | 44px touch targets; touch-manipulation on all controls; ScoreTracker grid at 320px; text-base on inputs (no iOS zoom) |
 | ⏳ | M-011 | Dark / Light Mode Toggle | DEFERRABLE | `prefers-color-scheme` + manual override |
-| ⏳ | M-012 | A11y Pass (ARIA + Contrast + Focus Ring) | MUST | `aria-live` on feedback; AA contrast check pending |
-| ⏳ | M-013 | Mode Toggle: Typing ⇌ Multiple Choice | DEFERRABLE | `MultipleChoice.tsx` to build |
-| ⏳ | M-014 | Subtle Micro-Interactions | DEFERRABLE | Fade on character change; pulse on correct/incorrect |
+| ✅ | M-012 | A11y Pass (ARIA + Contrast + Focus Ring) | MUST | Single aria-live container; AA contrast (purple-600, gray-600); main landmark; role=group on ScoreTracker |
+| ✅ | M-013 | Mode Toggle: Typing ⇌ Multiple Choice | DEFERRABLE | MultipleChoiceOptions.tsx; mode chip selector in App.tsx; submitSelection() in useQuiz |
+| ✅ | M-014 | Subtle Micro-Interactions | DEFERRABLE | slide-up on char change; pop on correct; shake on incorrect; confetti burst at streak 5/10/20/30 |
 
 ---
 
@@ -42,6 +45,11 @@
 | ✅ | M-028 | Practice Session API | MUST | POST /sessions, POST /sessions/:id/answers, PATCH /sessions/:id/complete; user_progress upserted per answer |
 | ✅ | M-029 | Test Attempt API | MUST | POST /attempts (20 random kana); POST /attempts/:id/submit; 80% pass threshold |
 | ✅ | M-030 | Admin Dashboard API | MUST | GET /admin/dashboard — learner count, logins today, pass rate, avg study time |
+| ✅ | M-047 | Super Admin Role Guard + /admin Route | MUST | Admin nav link (role-gated); /admin route in App.tsx |
+| ✅ | M-048 | Audit Backend — Logins / Sessions / Tests | MUST | GET /admin/audit/logins|sessions|tests; paginated |
+| ✅ | M-049 | Audit Page Frontend /admin | MUST | AdminPage.tsx; Radix Tabs; dashboard cards; Excel import/export |
+| ✅ | M-050 | Excel Export — GET /admin/users/export | MUST | openpyxl; styled .xlsx with user stats |
+| ✅ | M-051 | Excel Import — POST /admin/users/import | MUST | Upload .xlsx; validate; bulk INSERT ON CONFLICT DO NOTHING |
 | ✅ | M-031 | Frontend Auth — Login Screen + useAuth | MUST | LoginScreen.tsx; JWT stored in localStorage; sign-out |
 | ✅ | M-032 | Frontend API Client + useQuiz Integration | MUST | api.ts typed fetch client; useQuiz creates/records/completes sessions against DB |
 | ✅ | M-033 | Vite Dev Proxy — Gateway-Free Development | MUST | Vite proxies /api → :8000; only 2 services needed in dev |
@@ -67,7 +75,7 @@
 |---|---|---|---|---|
 | ⏳ | M-021 | Design Doc / Architecture Sketch | DEFERRABLE | 1–2 page doc on how the full project would be built |
 | ⏳ | M-022 | "Why This Stack Fits" Note | DEFERRABLE | FastAPI + Express gateway, Neon + Drizzle rationale |
-| ⏳ | M-023 | Katakana Mode Extension | DEFERRABLE | Branch demo; `katakana.ts` already exists |
+| ✅ | M-023 | Katakana Mode Extension | DEFERRABLE | useQuiz accepts script param; Hiragana/Katakana/Mixed chip selector in App.tsx |
 | ⏳ | M-024 | Admin Dashboard Mockup | DEFERRABLE | Static React page mocking Spec §8 dashboard |
 
 ---
@@ -106,3 +114,22 @@
 | 2026-04-22 | M-031 | Frontend Auth — Login Screen + useAuth | Completed |
 | 2026-04-22 | M-032 | Frontend API Client + useQuiz Integration | Completed |
 | 2026-04-22 | M-033 | Vite Dev Proxy — Gateway-Free Development | Completed |
+| 2026-04-22 | M-014 | Subtle Micro-Interactions | Completed |
+| 2026-04-22 | M-010 | Mobile-Responsive Layout | Completed |
+| 2026-04-22 | M-012 | A11y Pass (ARIA + Contrast + Focus Ring) | Completed |
+| 2026-04-23 | M-034 | Schema Migration — xp + streak_days + last_practice_date on users | Completed |
+| 2026-04-23 | M-037 | XP Awarding — practice + test flows | Completed |
+| 2026-04-23 | M-038 | Badge Awarding — 9 badges, auto-award logic | Completed |
+| 2026-04-23 | M-035 | Stats API — GET /users/me/stats | Completed |
+| 2026-04-23 | M-036 | Leaderboard API — GET /leaderboard | Completed |
+| 2026-04-23 | M-023 | Katakana Mode Extension | Completed |
+| 2026-04-23 | M-013 | Mode Toggle: Typing ⇌ Multiple Choice | Completed |
+| 2026-04-23 | M-039 | Dashboard Page — /dashboard | Completed |
+| 2026-04-23 | M-040 | XP Counter + Streak Flame in Quiz Header | Completed |
+| 2026-04-23 | M-041 | Hearts/Lives System | Completed |
+| 2026-04-23 | M-044 | Leaderboard Modal | Completed |
+| 2026-04-23 | M-047 | Super Admin Role Guard + /admin Route | Completed |
+| 2026-04-23 | M-048 | Audit Backend — Logins / Sessions / Tests | Completed |
+| 2026-04-23 | M-049 | Audit Page Frontend | Completed |
+| 2026-04-23 | M-050 | Excel Export | Completed |
+| 2026-04-23 | M-051 | Excel Import | Completed |

@@ -3,6 +3,11 @@
 
 ---
 
+## [M-010, M-012, M-014] Sprint 1 — UX polish, mobile QA, a11y — 2026-04-22
+- M-014: slide-up animation on character change (key-based re-trigger); pop on correct answer; shake on incorrect; confetti burst at streak milestones 5/10/20/30; all via new Tailwind keyframes (shake, pop, slideUp) + inline confettiFly keyframe
+- M-010: touch-manipulation on all interactive elements; min-h-[44px] enforced on buttons and inputs; ScoreTracker switched to CSS grid (no overflow at 320px); text-base on inputs prevents iOS auto-zoom
+- M-012: FeedbackDisplay refactored to single persistent aria-live container (eliminates duplicate ARIA regions); main landmark added; role=group on ScoreTracker; purple-400 → purple-600 and gray-400/500 → gray-600 throughout for AA contrast compliance
+
 ## [M-025..M-033] Full-stack database integration — 2026-04-22
 - Status: Completed
 - M-025: Drizzle ORM schema v2 — 11 tables (cohorts, users, kana_characters, practice_sessions, practice_answers, test_attempts, test_answers, user_progress, achievements, study_time_logs, login_events) + 5 enums pushed to Neon PostgreSQL
