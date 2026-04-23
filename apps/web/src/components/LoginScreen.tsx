@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import manaboLogo from '../assets/manabo_logo.png'
+import heroSvg    from '../assets/hero.svg'
 
 interface LoginScreenProps {
   onLogin: (applicantId: string, name?: string) => void
@@ -9,7 +10,7 @@ interface LoginScreenProps {
 
 export function LoginScreen({ onLogin, loading, error }: LoginScreenProps) {
   const [applicantId, setApplicantId] = useState('')
-  const [name, setName] = useState('')
+  const [name, setName]               = useState('')
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -17,24 +18,27 @@ export function LoginScreen({ onLogin, loading, error }: LoginScreenProps) {
     if (id) onLogin(id, name.trim() || undefined)
   }
 
-  const inputClass =
-    'w-full h-14 min-h-[44px] px-4 rounded-2xl border-2 border-purple-200 bg-white text-gray-800 ' +
-    'text-base sm:text-lg font-sans placeholder-gray-400 outline-none transition-colors duration-150 ' +
-    'touch-manipulation focus:border-purple-400 disabled:bg-gray-50 disabled:cursor-not-allowed'
+  const inputBase =
+    'w-full min-h-[44px] h-14 px-4 rounded-xl border-2 bg-white text-navy-800 outline-none ' +
+    'font-mono text-base tracking-wider placeholder-slate-400 ' +
+    'transition-colors duration-[120ms] touch-manipulation ' +
+    'focus:border-amber-400 disabled:bg-slate-50 disabled:cursor-not-allowed'
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 flex flex-col items-center justify-center px-4 py-8">
-      <div className="w-full max-w-sm flex flex-col gap-6">
+    <div className="min-h-screen bg-[#fafbfd] flex flex-col items-center justify-center px-6 py-10">
+      <div className="w-full max-w-sm flex flex-col gap-7">
 
-        <header className="flex flex-col items-center gap-1">
-          <img src={manaboLogo} alt="Manabo" className="h-12 w-auto object-contain" />
-          <p className="text-sm text-purple-600 font-medium tracking-wide">Sign in to start learning</p>
+        <header className="flex flex-col items-center gap-4">
+          <img src={heroSvg} alt="" className="w-32 h-32 object-contain" aria-hidden="true" />
+          <img src={manaboLogo} alt="Manabo" className="h-10 w-auto object-contain" />
+          <p className="text-navy-500 text-sm font-semibold text-center">
+            Enter your applicant ID to start learning.
+          </p>
         </header>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="applicant-id" className="text-sm font-medium text-gray-600">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="applicant-id" className="text-xs font-extrabold text-slate-500 uppercase tracking-widest">
               Applicant ID
             </label>
             <input
@@ -47,13 +51,14 @@ export function LoginScreen({ onLogin, loading, error }: LoginScreenProps) {
               autoComplete="off"
               spellCheck={false}
               disabled={loading}
-              className={inputClass}
+              style={{ borderColor: applicantId ? '#dde3ee' : '#dde3ee' }}
+              className={inputBase}
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="full-name" className="text-sm font-medium text-gray-600">
-              Full name <span className="text-gray-400 font-normal">(first visit only)</span>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="full-name" className="text-xs font-extrabold text-slate-500 uppercase tracking-widest">
+              Full name <span className="text-slate-400 font-normal normal-case tracking-normal">(first visit only)</span>
             </label>
             <input
               id="full-name"
@@ -63,29 +68,28 @@ export function LoginScreen({ onLogin, loading, error }: LoginScreenProps) {
               placeholder="Your full name"
               autoComplete="name"
               disabled={loading}
-              className={inputClass}
+              className={inputBase.replace('font-mono', 'font-sans')}
             />
           </div>
 
           {error && (
-            <p role="alert" className="text-sm text-rose-500 text-center">
-              {error}
+            <p role="alert" className="text-sm text-rose-500 text-center font-semibold">
+              Oops — {error}
             </p>
           )}
 
           <button
             type="submit"
             disabled={loading || !applicantId.trim()}
-            className="w-full h-14 min-h-[44px] rounded-2xl bg-purple-500 text-white font-semibold text-lg
-              active:scale-95 transition-transform duration-150 shadow-md touch-manipulation
-              hover:bg-purple-600 focus-visible:outline-none focus-visible:ring-4
-              focus-visible:ring-purple-300 disabled:opacity-50 disabled:cursor-not-allowed
-              disabled:active:scale-100"
+            className="btn-primary mt-1"
           >
-            {loading ? 'Signing in…' : 'Start Learning →'}
+            {loading ? 'Signing in…' : 'Start learning'}
           </button>
-
         </form>
+
+        <p className="text-xs text-slate-400 text-center">
+          Pre-registered by the B-JET office. No password needed.
+        </p>
       </div>
     </div>
   )
