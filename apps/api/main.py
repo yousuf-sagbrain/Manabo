@@ -18,13 +18,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from db.connection import init_pool, close_pool, get_pool
 from db.seed import seed_kana
-from routers import auth, practice, test, admin
+from db.migrate import run_migrations
+from routers import auth, practice, test, admin, users
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_pool()
     pool = await get_pool()
+    await run_migrations(pool)
     await seed_kana(pool)
     yield
     await close_pool()
@@ -49,6 +51,7 @@ app.include_router(auth.router,     prefix='/auth',     tags=['auth'])
 app.include_router(practice.router, prefix='/practice', tags=['practice'])
 app.include_router(test.router,     prefix='/test',     tags=['test'])
 app.include_router(admin.router,    prefix='/admin',    tags=['admin'])
+app.include_router(users.router,    prefix='/users',    tags=['users'])
 
 
 @app.get('/health', tags=['health'])
