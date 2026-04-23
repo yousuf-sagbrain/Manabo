@@ -1,5 +1,7 @@
 import asyncpg
 from . import kana as kana_db
+from . import users as users_db
+from . import badges as badges_db
 
 
 async def next_attempt_number(pool: asyncpg.Pool, user_id: str) -> int:
@@ -29,7 +31,7 @@ async def submit_attempt(
     user_id: str,
     answers: list[dict],
 ) -> dict:
-    score = 0
+    score   = 0
     records = []
 
     for order, ans in enumerate(answers, start=1):
@@ -37,10 +39,10 @@ async def submit_attempt(
         if not kana:
             continue
 
-        user_input = ans.get('user_input', '').strip().lower()
+        user_input    = ans.get('user_input', '').strip().lower()
         correct_romaji = kana['romaji']
-        aliases = kana['aliases'] or []
-        is_correct = user_input == correct_romaji or user_input in aliases
+        aliases        = kana['aliases'] or []
+        is_correct     = user_input == correct_romaji or user_input in aliases
 
         if is_correct:
             score += 1
@@ -64,9 +66,9 @@ async def submit_attempt(
         records,
     )
 
-    total = len(records)
+    total    = len(records)
     accuracy = round(score / total * 100, 2) if total > 0 else 0.0
-    passed = accuracy >= 80.0
+    passed   = accuracy >= 80.0
 
     await pool.execute(
         """
@@ -83,5 +85,19 @@ async def submit_attempt(
         accuracy,
         passed,
     )
+
+    # XP + badges
+    if passed:
+        await users_db.award_xp(pool, user_id, 100)
+
+        newly = await badges_db.award_badge_if_new(pool, user_id, 'first_pass')
+        if newly:
+            await users_db.award_xp(pool, user_id, 25)
+
+        if score == total:
+            await users_db.award_xp(pool, user_id, 50)
+            newly = await badges_db.award_badge_if_new(pool, user_id, 'perfect_score')
+            if newly:
+                await users_db.award_xp(pool, user_id, 25)
 
     return {'score': score, 'total': total, 'accuracy': accuracy, 'passed': passed}

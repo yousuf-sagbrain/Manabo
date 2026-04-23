@@ -1,4 +1,47 @@
 import asyncpg
+from datetime import date
+
+
+async def award_xp(pool: asyncpg.Pool, user_id: str, amount: int) -> None:
+    await pool.execute(
+        'UPDATE users SET xp = xp + $2, updated_at = NOW() WHERE id = $1',
+        user_id,
+        amount,
+    )
+
+
+async def update_streak(pool: asyncpg.Pool, user_id: str) -> int:
+    """Update consecutive-day streak. Returns new streak_days value."""
+    row = await pool.fetchrow(
+        'SELECT streak_days, last_practice_date FROM users WHERE id = $1',
+        user_id,
+    )
+    if not row:
+        return 0
+
+    today = date.today()
+    last  = row['last_practice_date']
+
+    if last is None:
+        new_streak = 1
+    elif last == today:
+        return int(row['streak_days'])
+    elif (today - last).days == 1:
+        new_streak = row['streak_days'] + 1
+    else:
+        new_streak = 1
+
+    await pool.execute(
+        """
+        UPDATE users
+        SET streak_days = $2, last_practice_date = $3, updated_at = NOW()
+        WHERE id = $1
+        """,
+        user_id,
+        new_streak,
+        today,
+    )
+    return new_streak
 
 
 async def get_by_applicant_id(pool: asyncpg.Pool, applicant_id: str) -> dict | None:

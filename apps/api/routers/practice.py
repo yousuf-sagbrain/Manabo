@@ -64,7 +64,7 @@ async def complete_session(
     pool=Depends(get_pool),
 ):
     await practice_db.complete_session(
-        pool, session_id,
+        pool, session_id, user['id'],
         body.correct_count, body.incorrect_count, body.streak_max, body.duration_seconds,
     )
 
