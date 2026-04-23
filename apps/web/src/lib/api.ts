@@ -32,6 +32,33 @@ export interface AuthUser {
   cohort_name: string | null
 }
 
+export interface UserStats {
+  xp:               number
+  streak_days:      number
+  level:            number
+  xp_to_next_level: number
+  rank:             number
+  badges:           { badge_key: string; earned_at: string }[]
+  mastered_hiragana: number
+  mastered_katakana: number
+  total_hiragana:    number
+  total_katakana:    number
+  total_sessions:    number
+  tests_passed:      number
+  accuracy_overall:  number
+  correct_today:     number
+  weak_characters:   { character: string; romaji: string; accuracy: number }[]
+}
+
+export interface LeaderboardEntry {
+  rank:         number
+  applicant_id: string
+  display_name: string
+  xp:           number
+  streak_days:  number
+  level:        number
+}
+
 export const api = {
   auth: {
     login: (applicantId: string, name?: string) =>
@@ -79,5 +106,45 @@ export const api = {
         `/test/attempts/${attemptId}/submit`,
         { method: 'POST', body: JSON.stringify({ answers }) },
       ),
+  },
+
+  users: {
+    myStats:     () =>
+      apiFetch<UserStats>('/users/me/stats'),
+
+    leaderboard: () =>
+      apiFetch<{ entries: LeaderboardEntry[]; your_rank: number | null }>('/users/leaderboard'),
+  },
+
+  admin: {
+    dashboard: () =>
+      apiFetch<{ learner_count: number; logins_today: number; pass_rate: number; avg_study_min_7d: number }>('/admin/dashboard'),
+
+    auditLogins: (page = 1) =>
+      apiFetch<{ total: number; page: number; page_size: number; items: Record<string, unknown>[] }>(`/admin/audit/logins?page=${page}`),
+
+    auditSessions: (page = 1) =>
+      apiFetch<{ total: number; page: number; page_size: number; items: Record<string, unknown>[] }>(`/admin/audit/sessions?page=${page}`),
+
+    auditTests: (page = 1) =>
+      apiFetch<{ total: number; page: number; page_size: number; items: Record<string, unknown>[] }>(`/admin/audit/tests?page=${page}`),
+
+    exportUsers: () => {
+      const token = getToken()
+      return fetch(`${BASE}/admin/users/export`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      })
+    },
+
+    importUsers: (file: File) => {
+      const token = getToken()
+      const fd = new FormData()
+      fd.append('file', file)
+      return fetch(`${BASE}/admin/users/import`, {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: fd,
+      }).then(r => r.json()) as Promise<{ created: number; skipped: number; errors: string[] }>
+    },
   },
 }
