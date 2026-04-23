@@ -64,6 +64,30 @@ _KATAKANA = [
 ]
 
 
+async def seed_cohorts(pool: asyncpg.Pool) -> None:
+    await pool.execute(
+        """
+        INSERT INTO cohorts (name)
+        SELECT 'Batch 16'
+        WHERE NOT EXISTS (
+            SELECT 1 FROM cohorts WHERE name = 'Batch 16'
+        )
+        """
+    )
+
+
+async def seed_admin(pool: asyncpg.Pool) -> None:
+    await pool.execute(
+        """
+        INSERT INTO users (applicant_id, full_name, role)
+        SELECT 'ADMIN', 'B-JET Admin', 'admin'
+        WHERE NOT EXISTS (
+            SELECT 1 FROM users WHERE applicant_id = 'ADMIN'
+        )
+        """
+    )
+
+
 async def seed_kana(pool: asyncpg.Pool) -> None:
     count = await pool.fetchval('SELECT COUNT(*) FROM kana_characters')
     if count and count >= 92:

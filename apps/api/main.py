@@ -7,6 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class _Env(BaseSettings):
     database_url: str
     jwt_secret: str = 'dev-secret-change-in-prod'
+    cors_origins: str = 'http://localhost:3000,http://localhost:4000'
     model_config = SettingsConfigDict(env_file='.env', extra='ignore')
 
 _env = _Env()
@@ -17,7 +18,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from db.connection import init_pool, close_pool, get_pool
-from db.seed import seed_kana
+from db.seed import seed_kana, seed_admin, seed_cohorts
 from db.migrate import run_migrations
 from routers import auth, practice, test, admin, users
 
@@ -27,7 +28,9 @@ async def lifespan(app: FastAPI):
     await init_pool()
     pool = await get_pool()
     await run_migrations(pool)
+    await seed_cohorts(pool)
     await seed_kana(pool)
+    await seed_admin(pool)
     yield
     await close_pool()
 
@@ -39,9 +42,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+_cors_origins = [o.strip() for o in _env.cors_origins.split(',') if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:3000', 'http://localhost:4000'],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
