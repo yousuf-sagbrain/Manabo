@@ -6,6 +6,9 @@ _SECRET = os.getenv('JWT_SECRET', 'dev-secret-change-in-prod')
 _ALGO   = 'HS256'
 _EXPIRE = timedelta(days=7)
 
+if os.getenv('ENV') == 'production' and _SECRET == 'dev-secret-change-in-prod':
+    raise RuntimeError('JWT_SECRET must be changed before running in production')
+
 
 def create_token(user_id: str, role: str) -> str:
     payload = {
