@@ -6,32 +6,34 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        kana: ['Noto Sans JP', 'sans-serif'],
-      },
       colors: {
-        brand: {
-          50:  '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#d946ef',
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
+        navy: {
+          50:  '#eef1f7',
+          100: '#d5dceb',
+          200: '#abb8d5',
+          300: '#7f91bd',
+          400: '#536ba7',
+          500: '#33487f',
+          600: '#1e2c5c',
+          700: '#172147',
+          800: '#101836',
+          900: '#080c1f',
         },
+      },
+      fontFamily: {
+        sans: ['Nunito', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        kana: ['Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', 'sans-serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       animation: {
         'bounce-once': 'bounce 0.3s ease-in-out 1',
-        'pulse-once': 'pulse 0.25s ease-in-out 1',
-        'fade-in':    'fadeIn 0.2s ease-out',
-        'slide-up':   'slideUp 0.25s ease-out',
-        'pop':        'pop 0.28s ease-out',
-        'shake':      'shake 0.38s ease-in-out',
-        'float-up':   'floatUp 0.9s ease-out forwards',
+        'pulse-once':  'pulse 0.25s ease-in-out 1',
+        'fade-in':     'fadeIn 0.2s ease-out',
+        'slide-up':    'slideUp 0.25s ease-out',
+        'pop':         'pop 0.28s cubic-bezier(0.34,1.56,0.64,1)',
+        'shake':       'shake 0.38s ease-in-out',
+        'float-up':    'floatUp 0.9s ease-out forwards',
+        'drawer-up':   'drawerUp 0.2s cubic-bezier(0.22,1,0.36,1)',
       },
       keyframes: {
         fadeIn: {
@@ -59,6 +61,10 @@ export default {
           '0%':   { opacity: '1',   transform: 'translateY(0)' },
           '70%':  { opacity: '0.8', transform: 'translateY(-28px)' },
           '100%': { opacity: '0',   transform: 'translateY(-40px)' },
+        },
+        drawerUp: {
+          from: { transform: 'translateY(100%)' },
+          to:   { transform: 'translateY(0)' },
         },
       },
     },

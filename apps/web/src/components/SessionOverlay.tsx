@@ -1,3 +1,5 @@
+import mascotSadSvg from '../assets/mascot_sad.svg'
+
 interface SessionStats {
   correct:   number
   incorrect: number
@@ -5,8 +7,8 @@ interface SessionStats {
 }
 
 interface SessionOverlayProps {
-  stats:    SessionStats
-  onRetry:  () => void
+  stats:   SessionStats
+  onRetry: () => void
 }
 
 export function SessionOverlay({ stats, onRetry }: SessionOverlayProps) {
@@ -17,44 +19,41 @@ export function SessionOverlay({ stats, onRetry }: SessionOverlayProps) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Session over"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-6"
+      aria-label="Out of hearts"
+      className="fixed inset-0 z-50 flex items-center justify-center px-6"
+      style={{ background: 'rgba(15,23,42,0.5)' }}
     >
-      <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-xs flex flex-col items-center gap-6">
-        <div className="flex flex-col items-center gap-1">
-          <span className="text-5xl" aria-hidden="true">💔</span>
-          <h2 className="text-xl font-bold text-gray-800 mt-2">Out of hearts!</h2>
-          <p className="text-sm text-gray-500 text-center">Don't give up — try again!</p>
+      <div className="bg-white rounded-2xl p-8 w-full max-w-xs flex flex-col items-center gap-6"
+           style={{ boxShadow: '0 8px 0 rgba(30,44,92,0.05), 0 16px 32px rgba(30,44,92,0.10)' }}>
+
+        <img src={mascotSadSvg} alt="" aria-hidden="true" className="w-28 h-28 object-contain" />
+
+        <div className="flex flex-col items-center gap-1 text-center">
+          <h2 className="text-xl font-black text-navy-800">So close.</h2>
+          <p className="text-sm text-slate-500">Let's practise a bit more and try again soon.</p>
         </div>
 
         <div className="grid grid-cols-3 gap-3 w-full">
           {[
-            { label: 'Correct',   value: stats.correct },
-            { label: 'Wrong',     value: stats.incorrect },
-            { label: 'Accuracy',  value: `${accuracy}%` },
+            { label: 'Correct',  value: stats.correct,  colour: 'text-green-600' },
+            { label: 'Wrong',    value: stats.incorrect, colour: 'text-rose-500' },
+            { label: 'Accuracy', value: `${accuracy}%`, colour: 'text-navy-600' },
           ].map(s => (
-            <div key={s.label} className="flex flex-col items-center gap-0.5 bg-gray-50 rounded-2xl py-3">
-              <span className="text-lg font-bold text-purple-700 tabular-nums">{s.value}</span>
-              <span className="text-xs text-gray-500">{s.label}</span>
+            <div key={s.label} className="flex flex-col items-center gap-0.5 bg-slate-50 rounded-xl py-3 border-2 border-slate-100">
+              <span className={`text-lg font-black tabular-nums ${s.colour}`}>{s.value}</span>
+              <span className="text-xs text-slate-500 font-bold">{s.label}</span>
             </div>
           ))}
         </div>
 
         {stats.streak > 0 && (
-          <p className="text-sm text-amber-500 font-semibold">
+          <p className="text-sm text-amber-500 font-extrabold">
             Best streak this session: {stats.streak} 🔥
           </p>
         )}
 
-        <button
-          onClick={onRetry}
-          className="w-full h-12 rounded-2xl bg-purple-500 text-white font-semibold text-base
-            shadow-md hover:bg-purple-600 active:scale-95 transition-transform
-            touch-manipulation focus-visible:outline-none focus-visible:ring-4
-            focus-visible:ring-purple-300"
-          autoFocus
-        >
-          Try Again
+        <button onClick={onRetry} className="btn-primary" autoFocus>
+          Try again
         </button>
       </div>
     </div>

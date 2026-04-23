@@ -2,14 +2,14 @@ import { useEffect, useRef } from 'react'
 import type { QuizState } from '../hooks/useQuiz'
 
 interface InputFieldProps {
-  value: string
-  state: QuizState
+  value:    string
+  state:    QuizState
   onChange: (value: string) => void
   onSubmit: () => void
 }
 
 export function InputField({ value, state, onChange, onSubmit }: InputFieldProps) {
-  const ref = useRef<HTMLInputElement>(null)
+  const ref      = useRef<HTMLInputElement>(null)
   const disabled = state !== 'answering'
 
   useEffect(() => {
@@ -21,9 +21,9 @@ export function InputField({ value, state, onChange, onSubmit }: InputFieldProps
   }
 
   return (
-    <div className="flex flex-col gap-2 w-full">
-      <label htmlFor="romaji-input" className="text-sm font-medium text-gray-600">
-        Type the romanisation
+    <div className="flex flex-col gap-1.5 w-full">
+      <label htmlFor="romaji-input" className="text-xs font-extrabold text-slate-500 uppercase tracking-widest">
+        Type the reading
       </label>
       <input
         id="romaji-input"
@@ -38,11 +38,15 @@ export function InputField({ value, state, onChange, onSubmit }: InputFieldProps
         autoCapitalize="none"
         spellCheck={false}
         aria-label="Romanisation input"
-        className="w-full h-14 min-h-[44px] px-4 rounded-2xl border-2 border-purple-200 bg-white
-          text-gray-800 text-base sm:text-lg font-sans placeholder-gray-400 outline-none
-          transition-colors duration-150 touch-manipulation
-          focus:border-purple-400 disabled:bg-gray-50 disabled:text-gray-400
-          disabled:border-gray-200 disabled:cursor-not-allowed"
+        className="
+          w-full min-h-[44px] h-14 px-4 rounded-xl border-2
+          bg-white text-navy-800 font-mono text-xl font-bold tracking-wider
+          placeholder-slate-300 outline-none touch-manipulation
+          transition-colors duration-[120ms]
+          focus:border-amber-400
+          disabled:bg-slate-50 disabled:text-slate-400 disabled:border-slate-200 disabled:cursor-not-allowed
+        "
+        style={{ borderColor: disabled ? '#e2e8f0' : '#dde3ee' }}
       />
     </div>
   )

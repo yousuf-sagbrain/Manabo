@@ -1,6 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #fafbfd;
+    color: #101836;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* ---- Skeuomorphic button lips ------------------------------------------ */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center w-full min-h-[44px] h-14 px-6 rounded-2xl
+           bg-amber-500 text-white font-extrabold text-sm tracking-widest uppercase
+           border-2 border-amber-500 cursor-pointer select-none touch-manipulation
+           transition-all duration-[120ms] ease-out
+           hover:bg-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-1
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    border-bottom-width: 6px;
+    border-bottom-color: #d97706;
+  }
+  .btn-primary:active:not(:disabled) {
+    border-bottom-width: 2px;
+    transform: translateY(2px);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center w-full min-h-[44px] h-14 px-6 rounded-2xl
+           bg-navy-600 text-white font-extrabold text-sm tracking-widest uppercase
+           border-2 border-navy-600 cursor-pointer select-none touch-manipulation
+           transition-all duration-[120ms] ease-out
+           hover:bg-navy-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-300 focus-visible:ring-offset-1
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    border-bottom-width: 6px;
+    border-bottom-color: #172147;
+  }
+  .btn-secondary:active:not(:disabled) {
+    border-bottom-width: 2px;
+    transform: translateY(2px);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center w-full min-h-[44px] h-14 px-6 rounded-2xl
+           bg-white text-navy-600 font-extrabold text-sm tracking-widest uppercase
+           border-2 cursor-pointer select-none touch-manipulation
+           transition-all duration-[120ms] ease-out
+           hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-1
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    border-color: #dde3ee;
+    border-bottom-width: 6px;
+    border-bottom-color: #c3cbdc;
+  }
+  .btn-outline:active:not(:disabled) {
+    border-bottom-width: 2px;
+    transform: translateY(2px);
+  }
+
+  .btn-success {
+    @apply inline-flex items-center justify-center w-full min-h-[44px] h-14 px-6 rounded-2xl
+           bg-green-500 text-white font-extrabold text-sm tracking-widest uppercase
+           border-2 border-green-500 cursor-pointer select-none touch-manipulation
+           transition-all duration-[120ms] ease-out
+           hover:bg-green-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-1;
+    border-bottom-width: 6px;
+    border-bottom-color: #16a34a;
+  }
+  .btn-success:active {
+    border-bottom-width: 2px;
+    transform: translateY(2px);
+  }
+}
 
 @keyframes confettiFly {
   0%   { transform: translate(-50%, -50%) rotate(0deg); opacity: 1; }

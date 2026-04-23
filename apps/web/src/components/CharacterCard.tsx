@@ -6,14 +6,19 @@ interface CharacterCardProps {
 
 export function CharacterCard({ char }: CharacterCardProps) {
   return (
-    <div className="flex flex-col items-center gap-2">
-      <p className="text-sm font-medium text-purple-600 tracking-widest uppercase">
-        What is this character?
+    <div className="flex flex-col items-center gap-3 w-full">
+      <p className="text-xs font-extrabold text-slate-400 tracking-widest uppercase">
+        What's the reading?
       </p>
-      <div className="flex items-center justify-center w-40 h-40 rounded-3xl bg-white shadow-lg">
+      <div
+        className="flex items-center justify-center w-full py-10 rounded-2xl
+                   bg-white border-2 border-slate-200"
+        style={{ borderBottomWidth: 4, borderBottomColor: '#dde3ee' }}
+      >
         <span
           key={char.char}
-          className="font-kana text-8xl leading-none select-none animate-slide-up"
+          className="font-kana font-bold leading-none select-none animate-pop text-navy-800"
+          style={{ fontSize: 160 }}
           aria-label={`Japanese character, read as: ${char.romaji}`}
         >
           {char.char}

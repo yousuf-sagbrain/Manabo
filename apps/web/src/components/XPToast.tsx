@@ -27,7 +27,7 @@ export function XPToast({ trigger, amount = 10 }: XPToastProps) {
       {toasts.map(t => (
         <span
           key={t.id}
-          className="animate-float-up text-sm font-bold text-purple-500 drop-shadow-sm select-none"
+          className="animate-float-up text-sm font-extrabold text-amber-500 drop-shadow-sm select-none"
         >
           +{t.amount} XP
         </span>
