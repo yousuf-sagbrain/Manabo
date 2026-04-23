@@ -11,13 +11,14 @@ export function ScoreTracker({ session }: ScoreTrackerProps) {
 
   return (
     <div
-      className="flex items-center justify-between w-full px-1"
+      role="group"
       aria-label="Session score"
+      className="grid grid-cols-4 w-full gap-1"
     >
-      <Stat label="Correct" value={session.correct} colour="text-emerald-600" />
-      <Stat label="Incorrect" value={session.incorrect} colour="text-rose-500" />
-      <Stat label="Accuracy" value={`${accuracy}%`} colour="text-purple-600" />
-      <Stat label="Streak" value={session.streak} colour="text-amber-500" suffix="🔥" />
+      <Stat label="Correct"   value={session.correct}           colour="text-emerald-600" />
+      <Stat label="Incorrect" value={session.incorrect}         colour="text-rose-500"    />
+      <Stat label="Accuracy"  value={`${accuracy}%`}            colour="text-purple-600"  />
+      <Stat label="Streak"    value={session.streak} suffix="🔥" colour="text-amber-500"  />
     </div>
   )
 }
@@ -31,11 +32,11 @@ interface StatProps {
 
 function Stat({ label, value, colour, suffix }: StatProps) {
   return (
-    <div className="flex flex-col items-center gap-0.5">
-      <span className={`text-lg font-bold tabular-nums ${colour}`}>
+    <div className="flex flex-col items-center gap-0.5 min-w-0">
+      <span className={`text-base sm:text-lg font-bold tabular-nums leading-tight ${colour}`}>
         {value}{suffix}
       </span>
-      <span className="text-xs text-gray-400 font-medium">{label}</span>
+      <span className="text-xs text-gray-600 font-medium truncate w-full text-center">{label}</span>
     </div>
   )
 }

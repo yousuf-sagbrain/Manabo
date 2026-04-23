@@ -18,9 +18,9 @@ export function LoginScreen({ onLogin, loading, error }: LoginScreenProps) {
   }
 
   const inputClass =
-    'w-full h-14 px-4 rounded-2xl border-2 border-purple-200 bg-white text-gray-800 ' +
-    'text-lg font-sans placeholder-gray-300 outline-none transition-colors duration-150 ' +
-    'focus:border-purple-400 disabled:bg-gray-50 disabled:cursor-not-allowed'
+    'w-full h-14 min-h-[44px] px-4 rounded-2xl border-2 border-purple-200 bg-white text-gray-800 ' +
+    'text-base sm:text-lg font-sans placeholder-gray-400 outline-none transition-colors duration-150 ' +
+    'touch-manipulation focus:border-purple-400 disabled:bg-gray-50 disabled:cursor-not-allowed'
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 flex flex-col items-center justify-center px-4 py-8">
@@ -28,13 +28,13 @@ export function LoginScreen({ onLogin, loading, error }: LoginScreenProps) {
 
         <header className="flex flex-col items-center gap-1">
           <img src={manaboLogo} alt="Manabo" className="h-12 w-auto object-contain" />
-          <p className="text-sm text-purple-400 font-medium tracking-wide">Sign in to start learning</p>
+          <p className="text-sm text-purple-600 font-medium tracking-wide">Sign in to start learning</p>
         </header>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="applicant-id" className="text-sm font-medium text-gray-500">
+            <label htmlFor="applicant-id" className="text-sm font-medium text-gray-600">
               Applicant ID
             </label>
             <input
@@ -52,7 +52,7 @@ export function LoginScreen({ onLogin, loading, error }: LoginScreenProps) {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="full-name" className="text-sm font-medium text-gray-500">
+            <label htmlFor="full-name" className="text-sm font-medium text-gray-600">
               Full name <span className="text-gray-400 font-normal">(first visit only)</span>
             </label>
             <input
@@ -76,8 +76,8 @@ export function LoginScreen({ onLogin, loading, error }: LoginScreenProps) {
           <button
             type="submit"
             disabled={loading || !applicantId.trim()}
-            className="w-full h-14 rounded-2xl bg-purple-500 text-white font-semibold text-lg
-              active:scale-95 transition-transform duration-150 shadow-md
+            className="w-full h-14 min-h-[44px] rounded-2xl bg-purple-500 text-white font-semibold text-lg
+              active:scale-95 transition-transform duration-150 shadow-md touch-manipulation
               hover:bg-purple-600 focus-visible:outline-none focus-visible:ring-4
               focus-visible:ring-purple-300 disabled:opacity-50 disabled:cursor-not-allowed
               disabled:active:scale-100"

@@ -22,7 +22,7 @@ export function InputField({ value, state, onChange, onSubmit }: InputFieldProps
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <label htmlFor="romaji-input" className="text-sm font-medium text-gray-500">
+      <label htmlFor="romaji-input" className="text-sm font-medium text-gray-600">
         Type the romanisation
       </label>
       <input
@@ -38,8 +38,9 @@ export function InputField({ value, state, onChange, onSubmit }: InputFieldProps
         autoCapitalize="none"
         spellCheck={false}
         aria-label="Romanisation input"
-        className="w-full h-14 px-4 rounded-2xl border-2 border-purple-200 bg-white text-gray-800
-          text-lg font-sans placeholder-gray-300 outline-none transition-colors duration-150
+        className="w-full h-14 min-h-[44px] px-4 rounded-2xl border-2 border-purple-200 bg-white
+          text-gray-800 text-base sm:text-lg font-sans placeholder-gray-400 outline-none
+          transition-colors duration-150 touch-manipulation
           focus:border-purple-400 disabled:bg-gray-50 disabled:text-gray-400
           disabled:border-gray-200 disabled:cursor-not-allowed"
       />
